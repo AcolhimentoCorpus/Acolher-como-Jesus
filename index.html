@@ -50,6 +50,8 @@
 
     // Função para formatar números de telefone
     function formatarTelefone(numero) {
+      // Converte o valor para string (caso seja número ou null)
+      numero = String(numero || '');
       // Remove tudo que não for dígito
       numero = numero.replace(/\D/g, '');
       // Formata o número: (XX) XXXXX-XXXX
@@ -80,7 +82,7 @@
           row.forEach((cell, index) => {
             const td = document.createElement('td');
             // Verifica se a célula está na coluna dos telefones (índice 2, coluna C)
-            if (index === 2 && /^\d+$/.test(cell)) {
+            if (index === 2 && cell && /^\d+$/.test(String(cell))) {
               td.innerHTML = `<a href="tel:${cell}">${formatarTelefone(cell)}</a>`;
             } else {
               td.textContent = cell;
