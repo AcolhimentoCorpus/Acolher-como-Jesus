@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Respostas do Formulário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f8f8f8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Respostas do Formulário</h1>
+  <table id="respostas">
+    <thead>
+      <tr></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // URL do seu Google Apps Script (com o SEU ID)
+    const url = 'https://script.google.com/macros/s/AKfycbxAh97IxyE93Xq_HWoJtg9fwOAaGU1AS56nI1F5eS95PtKQW7OQ9TCAHMMl1N82WES_NQ/exec';
+
+    // Função para buscar e exibir os dados
+    async function fetchData() {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const tableHead = document.querySelector('#respostas thead tr');
+        const tableBody = document.querySelector('#respostas tbody');
+
+        tableHead.innerHTML = '';
+        tableBody.innerHTML = '';
+
+        // Cria o cabeçalho da tabela
+        data[0].forEach(header => {
+          const th = document.createElement('th');
+          th.textContent = header;
+          tableHead.appendChild(th);
+        });
+
+        // Preenche a tabela com os dados
+        data.slice(1).forEach(row => {
+          const tr = document.createElement('tr');
+          row.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell;
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro:', error);
+      }
+    }
+
+    // Carrega os dados ao abrir a página
+    fetchData();
+  </script>
+</body>
+</html>
