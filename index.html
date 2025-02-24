@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visitantes</title>
+  <title>Respostas do Formulário</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,6 +26,13 @@
     th {
       background-color: #f8f8f8;
     }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -40,6 +47,14 @@
   <script>
     // URL do seu Google Apps Script (com o SEU ID)
     const url = 'https://script.google.com/macros/s/AKfycbxAh97IxyE93Xq_HWoJtg9fwOAaGU1AS56nI1F5eS95PtKQW7OQ9TCAHMMl1N82WES_NQ/exec';
+
+    // Função para formatar números de telefone
+    function formatarTelefone(numero) {
+      // Remove tudo que não for dígito
+      numero = numero.replace(/\D/g, '');
+      // Formata o número: (XX) XXXXX-XXXX
+      return numero.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    }
 
     // Função para buscar e exibir os dados
     async function fetchData() {
@@ -62,9 +77,14 @@
         // Preenche a tabela com os dados
         data.slice(1).forEach(row => {
           const tr = document.createElement('tr');
-          row.forEach(cell => {
+          row.forEach((cell, index) => {
             const td = document.createElement('td');
-            td.textContent = cell;
+            // Verifica se a célula está na coluna dos telefones (índice 2, coluna C)
+            if (index === 2 && /^\d+$/.test(cell)) {
+              td.innerHTML = `<a href="tel:${cell}">${formatarTelefone(cell)}</a>`;
+            } else {
+              td.textContent = cell;
+            }
             tr.appendChild(td);
           });
           tableBody.appendChild(tr);
